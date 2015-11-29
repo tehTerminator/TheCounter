@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/TheCounter/lib/jcommon-1.0.23.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/TheCounter/lib/jfreechart-1.0.19.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/TheCounter/lib/H2Connector.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/TheCounter/lib/jdatepicker-1.3.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/TheCounter/lib/joda-time-2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

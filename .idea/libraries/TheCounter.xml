@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="TheCounter">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TheCounter_jar/TheCounter.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
