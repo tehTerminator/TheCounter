@@ -27,7 +27,7 @@ public class DayReportController extends Controller<DayReport> {
 
         monthWise = new HashMap<>();
         File working_dir = new File(MainApp.working_directory );
-        File[] allFiles = working_dir.listFiles(TxtReader.getFileFilter(".txt", ".*(_\\d{1,4}){3}([.]txt)"));
+        File[] allFiles = working_dir.listFiles(TxtReader.getFileFilter());
 
         for(File f : allFiles){
             try {

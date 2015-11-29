@@ -1,5 +1,6 @@
 package in.maharaja.controllers;
 
+import in.maharaja.gui.AddProduct;
 import in.maharaja.gui.DayReport;
 import in.maharaja.gui.MainUI;
 import in.maharaja.main.MainApp;
@@ -70,7 +71,7 @@ public class MainController extends Controller<MainUI>{
 
             Connector con = new Connector(username, password);
             Statement stmt = con.getConnection().createStatement();
-            QueryBuilder q = new QueryBuilder("MAIN.PRODUCTS");
+            QueryBuilder q = new QueryBuilder("COUNTER.PRODUCTS");
 
             ResultSet rs = stmt.executeQuery( q.getDataQuery()   );
 
@@ -80,7 +81,7 @@ public class MainController extends Controller<MainUI>{
             List<String> items = new ArrayList<>();
 
             while( rs.next() ){
-                String a = rs.getString("NAME");
+                String a = rs.getString("TITLE");
                 items.add( a );
                 pw.println( a );
             }
@@ -121,6 +122,15 @@ public class MainController extends Controller<MainUI>{
         }
     }
 
+    private void install(){
+        try {
+            Connector con = new Connector("sa", "");
+            Statement stmt = con.getConnection().createStatement();
+        } catch(Exception ex){
+
+        }
+    }
+
     /**
      * All the events are registered through this method
      */
@@ -154,47 +164,11 @@ public class MainController extends Controller<MainUI>{
             dayReport.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
         });
 
-        getApp().registerActionEvent("Sync", e ->{
-            sync();
+        getApp().registerActionEvent("Products", e -> {
+            AddProduct product = new AddProduct();
+            product.createGUI();
+            product.showGUI();
         });
-
-    }
-
-    private void sync(){
-        //Create Loader Here
-        try {
-            Connector con = new Connector("sa", "");
-            Statement statement = con.getConnection().createStatement();
-            QueryBuilder queryBuilder = new QueryBuilder("MAIN.VARIABLES");
-            Map<String, String> condition = new HashMap<>();
-            DateTime last_sync = new DateTime();
-            condition.put("TITLE", "LAST_SYNC");
-
-            ResultSet resultSet = statement.executeQuery(queryBuilder.getDataQuery(condition));
-
-            while (resultSet.next()) {
-                last_sync = DateTime.parse(resultSet.getString("DATA"));
-            }
-
-            File directory = new File(MainApp.working_directory);
-            File[] allFiles = directory.listFiles(TxtReader.getFileFilter(".txt", ".*(_\\d{1,4}){3}([.]txt)"));
-
-            for(File f: allFiles){
-                String fileName = f.getName();
-                DateTime createdOn = DateTime.parse( fileName.substring(fileName.indexOf("_")+1, fileName.length()-3 ), DateTimeFormat.forPattern("yyyy_mm_dd"));
-
-                if(createdOn.isAfter( last_sync ) )
-                    uploadFile(f);
-            }
-
-        } catch (Exception ex1){
-            getApp().setStatus(ex1.toString());
-        }
-
-        //Destroy Loader Here
-    }
-
-    private void uploadFile( File f ){
 
     }
 }

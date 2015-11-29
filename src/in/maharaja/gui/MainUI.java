@@ -58,6 +58,12 @@ public class MainUI extends AbstractFrame {
         registerVariable("clientName", clientName);
 
         createMenu();
+
+        try {
+            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+        } catch(Exception ex){
+            System.out.println( ex.toString() );
+        }
     }
 
     public void createGUI() {

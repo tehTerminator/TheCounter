@@ -8,14 +8,13 @@ import java.util.List;
  * Created by Prateek on 04-11-2015.
  */
 public class TxtReader {
-    private BufferedReader bufferedReader;
     private List<String> lines;
     private String fileName = "";
 
 
     public TxtReader(File file) throws IOException{
         fileName = file.getAbsolutePath();
-        bufferedReader = null;
+        BufferedReader bufferedReader = null;
         lines = new ArrayList<>();
 
         bufferedReader = new BufferedReader( new FileReader(file) );
@@ -39,6 +38,15 @@ public class TxtReader {
         return lines.toArray(new String[ lines.size() ] );
     }
 
+    public String getText(){
+        String output = "";
+        for(String s: lines){
+            output += s;
+        }
+
+        return output;
+    }
+
     public static boolean fileExist(File f){
         return f.isFile();
     }
@@ -48,10 +56,10 @@ public class TxtReader {
         return file.isFile();
     }
 
-    public static FileFilter getFileFilter(String extension, String regex){
+    public static FileFilter getFileFilter(){
         return pathname -> {
             String ex = pathname.getName().substring( pathname.getName().lastIndexOf(".") );
-            if( ex.equals(extension) && pathname.getName().matches(regex))
+            if( ex.equals(".txt") && pathname.getName().matches(".*(_\\d{1,4}){3}([.]txt)"))
                 return true;
             return false;
         };

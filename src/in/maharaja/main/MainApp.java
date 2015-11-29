@@ -35,11 +35,11 @@ public class MainApp {
             Connector con = new Connector("sa", "");
             Statement stmt = con.getConnection().createStatement();
 
-            QueryBuilder q = new QueryBuilder("MAIN.VARIABLES");
+            QueryBuilder q = new QueryBuilder("COUNTER.VARIABLES");
             Map<String, String> conditions = new HashMap<>();
             conditions.put("TITLE", "WORKING_DIRECTORY");
 
-            ResultSet rs = stmt.executeQuery( new QueryBuilder("MAIN.VARIABLES").getDataQuery(new String[]{}, conditions));
+            ResultSet rs = stmt.executeQuery( new QueryBuilder("COUNTER.VARIABLES").getDataQuery(new String[]{}, conditions));
 
             while(rs.next()){
                 working_directory = rs.getString("DATA");
