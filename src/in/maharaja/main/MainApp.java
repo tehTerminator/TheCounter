@@ -5,6 +5,7 @@ import in.maharaja.gui.MainUI;
 import in.maharaja.sql.Connector;
 import in.maharaja.sql.QueryBuilder;
 
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,17 +16,31 @@ import java.util.Map;
  * Created by Prateek on 26-07-2015.
  */
 public class MainApp {
-    private static MainUI app;
     public static int mode = 1;
     public static String working_directory = "D:\\COUNTER\\";
+    private static MainUI app;
+    private static Image img = Toolkit.getDefaultToolkit().getImage("res/counter-icon.png");
+    private static TrayIcon trayIcon = new TrayIcon(img, "Counter");
 
     public static void main(String[] args) {
+        SystemTray systemTray = SystemTray.getSystemTray();
+
+        trayIcon.setImageAutoSize(true);
+
+        try {
+            systemTray.add(trayIcon);
+        } catch (AWTException ex) {
+            System.err.println("Tray Could Not Be Loaded");
+        }
+
         initialize();
         app = new MainUI();
         MainController mainController = new MainController( app );
         mainController.registerEvents();
 
+
     }
+
 
     /**
      *
@@ -46,10 +61,18 @@ public class MainApp {
             }
 
         } catch (SQLException ex1){
-            System.out.println(ex1.toString());
+            showNotice("SQL Error", ex1.toString(), TrayIcon.MessageType.ERROR);
         } catch (ClassNotFoundException ex2){
-            System.out.println(ex2.toString());
+            showNotice("Error", ex2.toString(), TrayIcon.MessageType.ERROR);
         }
+    }
+
+    public static void showNotice(String caption, String message) {
+        showNotice(caption, message, TrayIcon.MessageType.INFO);
+    }
+
+    public static void showNotice(String caption, String message, TrayIcon.MessageType messageType) {
+        trayIcon.displayMessage(caption, message, messageType);
     }
 }
 
