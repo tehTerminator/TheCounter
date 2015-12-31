@@ -37,8 +37,6 @@ public class MainApp {
         app = new MainUI();
         MainController mainController = new MainController( app );
         mainController.registerEvents();
-
-
     }
 
 

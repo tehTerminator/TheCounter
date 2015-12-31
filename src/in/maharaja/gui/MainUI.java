@@ -1,5 +1,7 @@
 package in.maharaja.gui;
 
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
@@ -51,7 +53,7 @@ public class MainUI extends AbstractFrame {
             address = InetAddress.getLocalHost();
             clientName = address.getHostName();
         } catch (UnknownHostException e) {
-            setStatus("Unknown Host" + e.toString());
+            showError("Unknown Host", e.toString());
             clientName = "Unknown";
         }
 
@@ -68,45 +70,21 @@ public class MainUI extends AbstractFrame {
 
     public void createGUI() {
 
-        JPanel topPanel = new JPanel();
-        topPanel.setPreferredSize(new Dimension(400, 30));
-        topPanel.setLayout(new FlowLayout());
+        setLayout( new MigLayout() );
 
-        topPanel.add(new JLabel("Amount : "));
-        topPanel.add(amountField);
-        topPanel.add(typeField);
-        topPanel.add(submitButton);
-        getContentPane().add(topPanel);
+        add(new JLabel("Amount : "));
+        add(amountField);
+        add(typeField);
+        add(submitButton);
 
         registerVariable("Amount", amountField);
         registerVariable("Product", typeField );
         registerVariable("Main Submit", submitButton);
-
-
-        JScrollPane scroller = new JScrollPane( status );
-        scroller.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
-        status.setLineWrap( true );
-        status.setEnabled( false );
-
-        getContentPane().add(scroller);
-
-        scroller.setPreferredSize( new Dimension(400, 40));
-
-        Border simpleBorder = BorderFactory.createEtchedBorder();
-        topPanel.setBorder( simpleBorder );
-
-        Border statusBorder = BorderFactory.createLoweredBevelBorder();
-        scroller.setBorder(statusBorder);
-
-        status.setBackground( Color.BLUE );
-        status.setForeground( Color.GREEN );
     }
 
     @Override
     public void showGUI() {
         pack();
-        DefaultCaret caret = (DefaultCaret) status.getCaret();
-        caret.setUpdatePolicy( DefaultCaret.ALWAYS_UPDATE );
         setVisible(true);
 
         this.getRootPane().setDefaultButton( submitButton );
@@ -159,12 +137,6 @@ public class MainUI extends AbstractFrame {
         for(String item : data){
             typeField.addItem(item);
         }
-    }
-
-    public void setStatus(String message) {
-        index++;
-        status.append( index + "-->>" + message + "\n");
-//        status.getParent().setValue( status.getParent().getMaximumSize() );
     }
 
     public void reset() {

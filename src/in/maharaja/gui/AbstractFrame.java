@@ -1,6 +1,9 @@
 package in.maharaja.gui;
 
+import in.maharaja.main.MainApp;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.util.HashMap;
@@ -93,5 +96,17 @@ public abstract class AbstractFrame extends JFrame {
 
     public abstract void createGUI();
     public abstract void showGUI();
+
+    public void showNotice(String caption, String message){
+        MainApp.showNotice(caption, message);
+    }
+
+    public void showError(String caption, String message){
+        MainApp.showNotice(caption, message, TrayIcon.MessageType.ERROR);
+    }
+
+    public void showWarning(String caption, String message){
+        MainApp.showNotice(caption, message, TrayIcon.MessageType.WARNING);
+    }
 
 }
