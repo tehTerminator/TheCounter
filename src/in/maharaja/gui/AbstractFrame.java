@@ -22,7 +22,6 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     /**
-     *
      * @param name as Any String
      * @param actionListener Some ActionListener to be attached to JButton or JMenuItem
      */
@@ -46,7 +45,6 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     /**
-     *
      * @param name any String
      * @param component any JComponent
      */
@@ -88,6 +86,18 @@ public abstract class AbstractFrame extends JFrame {
             else if( variableMap.get(name) instanceof JTextArea )
                 ((JTextArea) variableMap.get(name)).setText(value);
         }
+    }
+
+    public void showNotice(String caption, String message){
+        MainApp.showNotice(caption, message);
+    }
+
+    public void showError(String caption, String message){
+        MainApp.showNotice(caption, message, TrayIcon.MessageType.ERROR);
+    }
+
+    public void showWarning(String caption, String message){
+        MainApp.showNotice(caption, message, TrayIcon.MessageType.WARNING);
     }
 
     public Boolean contains(String name){

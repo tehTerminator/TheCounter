@@ -47,7 +47,7 @@ public class MainController extends Controller<MainUI>{
                 address = InetAddress.getLocalHost();
                 clientName = address.getHostName();
             } catch (UnknownHostException e) {
-                getApp().showWarning("Unknown Host", e.toString());
+                getApp().showWarning("Error", "Unknown Host" + e.toString());
                 clientName = "Unknown";
             }
         });
@@ -94,7 +94,7 @@ public class MainController extends Controller<MainUI>{
                 String products[] = txtReader.getLines();
                 getApp().populateComboBox( products );
             } catch(Exception ex1){
-                getApp().showWarning("Error Reading File", ex1.toString());
+                getApp().showWarning("Exception", ex1.toString());
             }
             getApp().showError("Database Error", "Unable to Connect to Database, getting Data from AccountList.txt" );
         }
@@ -116,7 +116,7 @@ public class MainController extends Controller<MainUI>{
                 getApp().showNotice("Task", String.format("Rs. %s - %s at %s", formatted[1], formatted[2], lastEntryTime.toLocalTime().toString()));
             }
         } catch (Exception ex){
-            getApp().showError("File Read Error", "Unable to Retrieve Last Entries from File " + fileName);
+            getApp().showError("File Error", "Unable to Retrieve Last Entries from File " + fileName);
         }
     }
 
@@ -139,7 +139,7 @@ public class MainController extends Controller<MainUI>{
             try{
                 new DataUpdater(getApp()).execute();
             } catch ( Exception ex ) {
-                getApp().showError("Data Insert Error", ex.toString());
+                getApp().showNotice("Data Inserted", ex.toString());
             }
         });
 
@@ -194,7 +194,7 @@ class DataUpdater extends SwingWorker<Integer, Integer>{
                 writer.write( output );
                 writer.close();
 
-                getApp().showNotice("Insert Successful", String.format("Rs.%s - %s at %s", amount, product, new DateTime(time).toString(DateTimeFormat.forPattern("h:m:s a")) ));
+                getApp().showNotice("Inserted", String.format("Rs.%s - %s at %s", amount, product, new DateTime(time).toString(DateTimeFormat.forPattern("h:m:s a")) ));
                 getApp().reset();
             } catch (IOException exception) {
                 JOptionPane.showMessageDialog(getApp(), "IO Error while Witting file");
