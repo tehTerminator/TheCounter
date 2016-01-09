@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TheCounter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TheCounter_jar</output-path>
+    <root id="archive" name="TheCounter.jar">
+      <element id="module-output" name="TheCounter" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/production/TheCounter/lib/jcommon-1.0.23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/production/TheCounter/lib/jfreechart-1.0.19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/production/TheCounter/lib/H2Connector.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/production/TheCounter/lib/jdatepicker-1.3.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/production/TheCounter/lib/joda-time-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/miglayout-4.0-swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/jcommon-1.0.23.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/jfreechart-1.0.19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/H2Connector.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/joda-time-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/jdatepicker-1.3.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/out/artifacts/TheCounter_jar/TheCounter.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

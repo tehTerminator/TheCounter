@@ -10,14 +10,25 @@ import java.awt.*;
  */
 public class AddProduct extends AbstractFrame {
 
+    private JList<String> productList;
+
     public AddProduct(){
         super("Add New Product");
         setSize(new Dimension(300, 500) );
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
+
+        productList = new JList<>();
+        productList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
     }
 
     public void createGUI(){
-        setLayout( new MigLayout("wrap 2") );
+
+        setLayout( new MigLayout() );
+
+        JScrollPane scrollPane = new JScrollPane(productList);
+        scrollPane.setHorizontalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
+        add( scrollPane, "dock west");
+
         add(new JLabel("Name"));
 
         JTextField nameField = new JTextField(30);
