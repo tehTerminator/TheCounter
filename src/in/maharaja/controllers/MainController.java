@@ -4,26 +4,24 @@ import in.maharaja.gui.DayReport;
 import in.maharaja.gui.MainUI;
 import in.maharaja.gui.Products;
 import in.maharaja.main.MainApp;
-import in.maharaja.sql.Connector;
-import in.maharaja.sql.QueryBuilder;
 import in.maharaja.utilities.TxtReader;
 import in.maharaja.utilities.TxtWriter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Prateek on 01-11-2015.
+ * Controller for MainUI
  */
 public class MainController extends Controller<MainUI>{
 
@@ -63,21 +61,14 @@ public class MainController extends Controller<MainUI>{
         getApp().showNotice("Task", "Getting Account List");
 
         try{
-            String username = "sa",
-                    password = "";
-
-
-            Connector con = new Connector(username, password);
-            Statement stmt = con.getConnection().createStatement();
-            QueryBuilder q = new QueryBuilder("COUNTER.PRODUCTS");
-
-            ResultSet rs = stmt.executeQuery( q.getDataQuery()   );
+            ResultSet rs = MainApp.executeQuery("SELECT * FROM COUNTER.PRODUCTS");
 
             // false to overwrite.
             File accountList = new File("D:\\COUNTER\\AccountList.txt");
             PrintWriter pw = new PrintWriter( new BufferedOutputStream( new FileOutputStream(accountList, false)));
             List<String> items = new ArrayList<>();
 
+            assert rs != null;
             while( rs.next() ){
                 String a = rs.getString("TITLE");
                 items.add( a );
@@ -121,12 +112,7 @@ public class MainController extends Controller<MainUI>{
     }
 
     private void install(){
-        try {
-            Connector con = new Connector("sa", "");
-            Statement stmt = con.getConnection().createStatement();
-        } catch(Exception ex){
 
-        }
     }
 
     /**
@@ -135,7 +121,7 @@ public class MainController extends Controller<MainUI>{
     public void registerEvents() {
 
 
-        getApp().registerActionEvent("Main Submit", updateData->{
+        getApp().registerEvent("Main Submit", (ActionListener) updateData->{
             try{
                 new DataUpdater(getApp()).execute();
             } catch ( Exception ex ) {
@@ -143,7 +129,7 @@ public class MainController extends Controller<MainUI>{
             }
         });
 
-        getApp().registerActionEvent("Exit", exitSystem->System.exit(0));
+        getApp().registerEvent("Exit", (ActionListener) exitSystem->System.exit(0));
 
         getApp().registerKeyAdapter("Amount", new KeyAdapter() {
             @Override
@@ -155,14 +141,14 @@ public class MainController extends Controller<MainUI>{
             }
         });
 
-        getApp().registerActionEvent("Daily Report", dr->{
+        getApp().registerEvent("Daily Report", (ActionListener) dr->{
             DayReport dayReport = new DayReport();
             DayReportController controller = new DayReportController( dayReport );
             controller.registerEvents();
             dayReport.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
         });
 
-        getApp().registerActionEvent("Products", e -> {
+        getApp().registerEvent("Products", (ActionListener) e -> {
             Products p = new Products();
             ProductController controller = new ProductController(p);
         });

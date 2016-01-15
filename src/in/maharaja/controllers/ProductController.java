@@ -3,12 +3,13 @@ package in.maharaja.controllers;
 import in.maharaja.gui.Products;
 import in.maharaja.sql.Connector;
 
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
 /**
- * Created by MPONS040401 on 14-01-2016.
+ * Controller for Product Form
  */
 public class ProductController extends Controller<Products> {
 
@@ -23,7 +24,7 @@ public class ProductController extends Controller<Products> {
 
     @Override
     public void registerEvents() {
-        getApp().registerActionEvent("Refresh Button", e -> reloadProducts());
+        getApp().registerEvent("Refresh Button", (ActionListener) e -> reloadProducts());
     }
 
     private void reloadProducts() {

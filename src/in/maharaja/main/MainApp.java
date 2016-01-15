@@ -2,25 +2,19 @@ package in.maharaja.main;
 
 import in.maharaja.controllers.MainController;
 import in.maharaja.gui.MainUI;
-import in.maharaja.sql.Connector;
-import in.maharaja.sql.QueryBuilder;
 
 import java.awt.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.*;
 
 /**
- * Created by Prateek on 26-07-2015.
+ * Main App Handles everything in Background
  */
 public class MainApp {
     public static int mode = 1;
     public static String working_directory = "D:\\COUNTER\\";
-    private static MainUI app;
     private static Image img = Toolkit.getDefaultToolkit().getImage("res/counter-icon.png");
     private static TrayIcon trayIcon = new TrayIcon(img, "Counter");
+    private static final PopupMenu popupMenu = new PopupMenu();
 
     public static void main(String[] args) {
         SystemTray systemTray = SystemTray.getSystemTray();
@@ -29,13 +23,17 @@ public class MainApp {
 
         try {
             systemTray.add(trayIcon);
+            MenuItem exit = new MenuItem("Exit");
+            exit.addActionListener(e -> System.exit(0));
+            popupMenu.add(exit);
+            trayIcon.setPopupMenu(popupMenu);
         } catch (AWTException ex) {
             System.err.println("Tray Could Not Be Loaded");
         }
 
         initialize();
-        app = new MainUI();
-        MainController mainController = new MainController( app );
+        MainUI app = new MainUI();
+        MainController mainController = new MainController(app);
         mainController.registerEvents();
     }
 
@@ -44,25 +42,18 @@ public class MainApp {
      *
      */
     private static void initialize(){
-        try{
-            Connector con = new Connector("sa", "");
-            Statement stmt = con.getConnection().createStatement();
-
-            QueryBuilder q = new QueryBuilder("COUNTER.VARIABLES");
-            Map<String, String> conditions = new HashMap<>();
-            conditions.put("TITLE", "WORKING_DIRECTORY");
-
-            ResultSet rs = stmt.executeQuery( new QueryBuilder("COUNTER.VARIABLES").getDataQuery(new String[]{}, conditions));
-
+        ResultSet rs = executeQuery("SELECT * FROM COUNTER.VARIABLES WHERE TITLE = 'WORKING_DIRECTORY'");
+        try {
             while(rs.next()){
                 working_directory = rs.getString("DATA");
+                showNotice("Working Directory", working_directory);
             }
-
-        } catch (SQLException ex1){
-            showNotice("SQL Error", ex1.toString(), TrayIcon.MessageType.ERROR);
-        } catch (ClassNotFoundException ex2){
-            showNotice("Error", ex2.toString(), TrayIcon.MessageType.ERROR);
+        } catch (SQLException e) {
+            showNotice("SQLException", e.toString());
+        } catch (NullPointerException ex){
+            showNotice("NullPointerException", ex.toString(), TrayIcon.MessageType.ERROR);
         }
+
     }
 
     public static void showNotice(String caption, String message) {
@@ -71,6 +62,34 @@ public class MainApp {
 
     public static void showNotice(String caption, String message, TrayIcon.MessageType messageType) {
         trayIcon.displayMessage(caption, message, messageType);
+    }
+
+    public static Connection getConnection() throws ClassNotFoundException, SQLException{
+        Class.forName("org.h2.Driver");
+        return DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
+    }
+
+    public static void executeUpdate(String query){
+        try {
+            Connection con = getConnection();
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(query);
+        } catch(SQLException ex){
+            showNotice("SQLException Occured", ex.toString(), TrayIcon.MessageType.ERROR);
+        } catch (ClassNotFoundException e) {
+            showNotice("ClassNotFoundException", e.toString(), TrayIcon.MessageType.ERROR);
+        }
+    }
+
+    public static ResultSet executeQuery(String query){
+        try{
+            Connection con = getConnection();
+            Statement stmt = con.createStatement();
+            return stmt.executeQuery(query);
+        } catch (Exception e) {
+            showNotice("Exception", e.toString());
+        }
+        return null;
     }
 }
 

@@ -3,9 +3,11 @@ package in.maharaja.gui;
 import in.maharaja.main.MainApp;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,18 +21,30 @@ public abstract class AbstractFrame extends JFrame {
     AbstractFrame(String title){
         super(title);
         variableMap = new HashMap<>();
+
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Center JFrame WRT Screen
     }
 
     /**
      * @param name as Any String
-     * @param actionListener Some ActionListener to be attached to JButton or JMenuItem
+     * @param eventListener Some EventListener to be attached to JComponent
      */
-    public void registerActionEvent(String name, ActionListener actionListener){
-        if( variableMap.containsKey(name) ){
-            if( variableMap.get(name) instanceof JButton )
-                ((JButton) variableMap.get(name)).addActionListener(actionListener);
-            else if( variableMap.get(name) instanceof JMenuItem )
-                ((JMenuItem) variableMap.get(name)).addActionListener(actionListener);
+    public void registerEvent(String name, EventListener eventListener){
+        try {
+            if (variableMap.containsKey(name)) {
+                Object obj = variableMap.get(name);
+                if (obj instanceof JButton || obj instanceof JComboBox) {
+                    ((JButton) obj).addActionListener((ActionListener) eventListener);
+                } else if (obj instanceof JMenuItem) {
+                    ((JMenuItem) obj).addActionListener((ActionListener) eventListener);
+                } else if (obj instanceof JList) {
+                    ListSelectionModel model = ((JList) obj).getSelectionModel();
+                    model.addListSelectionListener((ListSelectionListener) eventListener);
+                }
+            }
+        } catch (ClassCastException e1){
+            MainApp.showNotice("ClassCastException", e1.toString());
         }
     }
 

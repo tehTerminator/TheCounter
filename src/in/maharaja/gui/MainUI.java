@@ -3,8 +3,6 @@ package in.maharaja.gui;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -12,7 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by Prateek on 26-07-2015.
+ * Main UI that stays infront
  */
 public class MainUI extends AbstractFrame {
     private JTextField amountField;
@@ -31,7 +29,7 @@ public class MainUI extends AbstractFrame {
         setResizable(false);
 
         status = new JTextArea();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         amountField = new JTextField();
         amountField.setPreferredSize(new Dimension(80, 27));
@@ -42,13 +40,8 @@ public class MainUI extends AbstractFrame {
         add(contentPane);
         setContentPane(contentPane);
         getContentPane().setLayout(new GridLayout(2, 1, 1, 1));
-        getContentPane().setBackground(Color.WHITE);
 
-
-        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation((int) (screenDimension.getWidth() / 2) - (this.getWidth() / 2), (int) (screenDimension.getHeight() / 2) - (this.getHeight() / 2));
-
-        InetAddress address = null;
+        InetAddress address;
         try {
             address = InetAddress.getLocalHost();
             clientName = address.getHostName();
