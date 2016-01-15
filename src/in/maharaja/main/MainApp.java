@@ -18,7 +18,7 @@ import java.util.Map;
 public class MainApp {
     public static int mode = 1;
     public static String working_directory = "D:\\COUNTER\\";
-    private static MainUI app;W
+    private static MainUI app;
     private static Image img = Toolkit.getDefaultToolkit().getImage("res/counter-icon.png");
     private static TrayIcon trayIcon = new TrayIcon(img, "Counter");
 

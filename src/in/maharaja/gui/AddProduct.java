@@ -10,37 +10,37 @@ import java.awt.*;
  */
 public class AddProduct extends AbstractFrame {
 
+    private JList<String> productList;
+
     public AddProduct(){
         super("Add New Product");
-
         setSize(new Dimension(300, 500) );
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
+
+        productList = new JList<>();
+        productList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public void createGUI(){
-        setLayout( new MigLayout() );
-        GridBagConstraints c = new GridBagConstraints();
 
-        setConstraints(c, 0, 0, 1, 1);
-        add(new JLabel("Name"), c);
+        setLayout( new MigLayout() );
+
+        JScrollPane scrollPane = new JScrollPane(productList);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, "dock west");
+
+        add(new JLabel("Name"));
 
         JTextField nameField = new JTextField(30);
-        setConstraints(c, 0, 1, 3, 1);
-        add( nameField, c );
-
-        setConstraints(c, 1, 0, 1, 1);
-        add(new JLabel("Rate"), c);
+        add(nameField);
+        add(new JLabel("Rate"));
 
         JTextField rateField = new JTextField(30);
-        setConstraints(c, 1, 1, 3, 1);
-        add(rateField, c);
-
-        setConstraints(c, 2, 0, 1, 1);
-        add(new JLabel("Limited"), c);
+        add(rateField);
+        add(new JLabel("Limited"));
 
         JCheckBox limited = new JCheckBox("Is Limited");
-        setConstraints(c, 2, 1, 3, 1);
-        add(limited, c);
+        add(limited);
 
         registerVariable("Product Name", nameField);
         registerVariable("Rate", rateField);
@@ -48,12 +48,5 @@ public class AddProduct extends AbstractFrame {
 
     public void showGUI(){
         setVisible( true );
-    }
-
-    public void setConstraints(GridBagConstraints c, int x, int y, int spanx, int spany){
-        c.gridx = x;
-        c.gridy = y;
-        c.gridwidth = x;
-        c.gridheight = y;
     }
 }

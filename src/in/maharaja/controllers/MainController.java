@@ -1,8 +1,8 @@
 package in.maharaja.controllers;
 
-import in.maharaja.gui.AddProduct;
 import in.maharaja.gui.DayReport;
 import in.maharaja.gui.MainUI;
+import in.maharaja.gui.Products;
 import in.maharaja.main.MainApp;
 import in.maharaja.sql.Connector;
 import in.maharaja.sql.QueryBuilder;
@@ -163,9 +163,8 @@ public class MainController extends Controller<MainUI>{
         });
 
         getApp().registerActionEvent("Products", e -> {
-            AddProduct product = new AddProduct();
-            product.createGUI();
-            product.showGUI();
+            Products p = new Products();
+            ProductController controller = new ProductController(p);
         });
 
     }
