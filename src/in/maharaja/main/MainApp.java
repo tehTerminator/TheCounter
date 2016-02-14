@@ -46,7 +46,6 @@ public class MainApp {
         try {
             while(rs.next()){
                 working_directory = rs.getString("DATA");
-                showNotice("Working Directory", working_directory);
             }
         } catch (SQLException e) {
             showNotice("SQLException", e.toString());

@@ -1,6 +1,6 @@
 package in.maharaja.controllers;
 
-import in.maharaja.gui.AbstractFrame;
+        import in.maharaja.gui.AbstractFrame;
 
 /**
  * Created by Prateek on 01-11-2015.
@@ -16,7 +16,11 @@ public abstract class Controller<T extends AbstractFrame> {
         return app;
     }
 
-    abstract public void registerEvents();
+    abstract public void registerEvents() throws IllegalStateException;
 
+    public Object getElement(String name){
+        if( getApp().contains(name) ) return getApp().getObject(name);
+        return new Object();
+    }
 
 }

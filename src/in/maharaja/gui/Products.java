@@ -17,7 +17,7 @@ public class Products extends AbstractFrame {
     public Products() {
         super("Products");
         setLayout(new MigLayout());
-        setSize(new Dimension(280, 300));
+        setSize(new Dimension(275, 300));
 
         setResizable(false);
 
@@ -48,7 +48,7 @@ public class Products extends AbstractFrame {
         productList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         productList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         JScrollPane scrollPane = new JScrollPane(productList);
-        scrollPane.setMinimumSize(new Dimension(250, 200));
+        scrollPane.setMinimumSize(new Dimension(245, 220));
         add(scrollPane, "dock south");
 
         registerVariable("Product List", productList);
@@ -60,11 +60,9 @@ public class Products extends AbstractFrame {
     }
 
     public void addData(Vector<String> data) {
-        DefaultListModel listModel = (DefaultListModel) productList.getModel();
+        DefaultListModel listModel = new DefaultListModel();
         productList.setModel(listModel);
         listModel.clear();
-        for (String s : data) {
-            listModel.addElement(s);
-        }
+        data.stream().forEach((i)-> listModel.addElement(i));
     }
 }

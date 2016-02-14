@@ -1,45 +1,66 @@
 package in.maharaja.controllers;
 
-import in.maharaja.gui.AddProduct;
+import in.maharaja.gui.AddEditProduct;
+import in.maharaja.main.MainApp;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * Controller for AddProduct Form
+ * Controller for AddEditProduct Form
  */
-public class AddProductController extends Controller<AddProduct> {
+public class AddProductController extends Controller<AddEditProduct> {
 
 
-    public AddProductController(AddProduct app) {
+    public AddProductController(AddEditProduct app) {
         super(app);
         app.createGUI();
-        registerEvents();
+        app.showGUI();
     }
 
     @Override
     public void registerEvents() {
-        getApp().registerEvent("Type", (ActionListener) e -> {
-            JTextField qty = (JTextField) getApp().getComponent("Quantity");
-            JComboBox type = (JComboBox) getApp().getComponent("Type");
 
-            if( type.getSelectedIndex() == 0 )
-                qty.setEnabled( false );
-            else qty.setEnabled( true );
+        ( (JComboBox) getElement("Type") ).addItemListener( e1 -> {
+            if( e1.getStateChange() == ItemEvent.SELECTED ){
+                int item = ((JComboBox) getElement("Type")).getSelectedIndex();
+                if( item == 0 )
+                    ((JTextField) getElement("Quantity")).setEnabled( false );
+                else
+                    ((JTextField) getElement("Quantity")).setEnabled( true );
+            }
         });
 
-        getApp().registerEvent("Submit", (ActionListener) e->{
-            AddProduct app = getApp();
+        ((JButton) getElement("Submit") ).addActionListener(e->{
+            AddEditProduct app = getApp();
             String name = app.getVariable("Product Name"),
                     rate = app.getVariable("Rate"),
                     type = app.getVariable("Type"),
                     desc = app.getVariable("Description"),
                     qty = app.getVariable("Quantity");
 
-            if( type.compareTo("LIMITED") == 1 ){
-                String query = String.format("INSERT INTO COUNTER.PRODUCTS(TITLE, DESCRIPTION, RATE, IS_LIMITED) VALUES('%s', '%s', '%s', True)", name, desc, rate);
 
+            int isLimited = type.compareTo("LIMITED") == 1 ? 1 : 0; //if Limited set True else set False
+            String query = String.format("INSERT INTO COUNTER.PRODUCTS(TITLE, DESCRIPTION, RATE, IS_LIMITED) VALUES('%s', '%s', '%s', '%d')", name, desc, rate, isLimited);
+            MainApp.executeUpdate(query);
 
+            if( isLimited == 1 ){
+                query = "SELECT MAX(ID) AS ID FROM COUNTER.PRODUCTS";
+                ResultSet rs = MainApp.executeQuery(query);
+                int lastID = 0;
+                try {
+                    while (rs.next()) {
+                        lastID = rs.getInt("ID");
+                    }
+                    if (lastID > 0) {
+                        query = String.format("INSERT INTO COUNTER.QUANTITY(PID, QUANTITY) VALUES('%d', '%d')", lastID, qty);
+                        MainApp.executeUpdate(query);
+                    }
+                } catch(SQLException ex){
+                    getApp().showError("SQL Exception", ex.toString());
+                }
             }
         });
     }

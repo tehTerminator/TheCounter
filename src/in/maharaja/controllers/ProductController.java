@@ -1,9 +1,12 @@
 package in.maharaja.controllers;
 
+import in.maharaja.gui.AddEditProduct;
+import in.maharaja.gui.AddProduct;
 import in.maharaja.gui.Products;
+import in.maharaja.main.MainApp;
 import in.maharaja.sql.Connector;
 
-import java.awt.event.ActionListener;
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
@@ -15,16 +18,24 @@ public class ProductController extends Controller<Products> {
 
     public ProductController(Products app) {
         super(app);
-
         app.createGUI();
-        registerEvents();
         app.showGUI();
 
     }
 
     @Override
     public void registerEvents() {
-        getApp().registerEvent("Refresh Button", (ActionListener) e -> reloadProducts());
+        ((JButton)getElement("Add Button") ).addActionListener(e1 -> {
+            AddEditProduct addEditProduct = new AddEditProduct(AddEditProduct.ADD);
+            AddProductController controller = new AddProductController(addEditProduct);
+            try{
+                controller.registerEvents();
+            } catch (Exception e){
+                getApp().showError("Illegal State Exception", e.toString());
+            }
+        });
+
+        ((JButton)getElement("Refresh Button")).addActionListener( e -> reloadProducts() );
     }
 
     private void reloadProducts() {

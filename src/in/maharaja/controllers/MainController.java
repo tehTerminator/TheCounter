@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -19,6 +18,7 @@ import java.net.UnknownHostException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Controller for MainUI
@@ -58,14 +58,11 @@ public class MainController extends Controller<MainUI>{
 
     private void getAccountList(){
 
-        getApp().showNotice("Task", "Getting Account List");
-
         try{
             ResultSet rs = MainApp.executeQuery("SELECT * FROM COUNTER.PRODUCTS");
 
             // false to overwrite.
-            File accountList = new File("D:\\COUNTER\\AccountList.txt");
-            PrintWriter pw = new PrintWriter( new BufferedOutputStream( new FileOutputStream(accountList, false)));
+            PrintWriter pw = new PrintWriter("D:/COUNTER/ProductList.txt", "UTF-8");
             List<String> items = new ArrayList<>();
 
             assert rs != null;
@@ -74,25 +71,23 @@ public class MainController extends Controller<MainUI>{
                 items.add( a );
                 pw.println( a );
             }
-
-            pw.flush();
             pw.close();
 
             getApp().populateComboBox( items.toArray( new String[items.size()]) );
         } catch (Exception ex){
             try{
-                TxtReader txtReader = new TxtReader(new File("D:\\COUNTER\\AccountList.txt") );
+                TxtReader txtReader = new TxtReader(new File("D:\\COUNTER\\ProductList.txt") );
                 String products[] = txtReader.getLines();
                 getApp().populateComboBox( products );
             } catch(Exception ex1){
                 getApp().showWarning("Exception", ex1.toString());
+            } finally {
+                getApp().showError("Database Error", "Unable to Connect to Database, getting Data from AccountList.txt" );
             }
-            getApp().showError("Database Error", "Unable to Connect to Database, getting Data from AccountList.txt" );
         }
     }
 
     private void getLastEntry(){
-        getApp().showNotice("Task", "Getting Last Entries from Record");
         String fileName = "";
         try {
             TxtReader txtReader = new TxtReader(MainApp.working_directory + "\\" + TxtWriter.getFileName() );
@@ -107,7 +102,7 @@ public class MainController extends Controller<MainUI>{
                 getApp().showNotice("Task", String.format("Rs. %s - %s at %s", formatted[1], formatted[2], lastEntryTime.toLocalTime().toString()));
             }
         } catch (Exception ex){
-            getApp().showError("File Error", "Unable to Retrieve Last Entries from File " + fileName);
+            return;
         }
     }
 
@@ -121,7 +116,7 @@ public class MainController extends Controller<MainUI>{
     public void registerEvents() {
 
 
-        getApp().registerEvent("Main Submit", (ActionListener) updateData->{
+        ((JButton)getElement("Main Submit")).addActionListener( e1 -> {
             try{
                 new DataUpdater(getApp()).execute();
             } catch ( Exception ex ) {
@@ -129,11 +124,12 @@ public class MainController extends Controller<MainUI>{
             }
         });
 
-        getApp().registerEvent("Exit", (ActionListener) exitSystem->System.exit(0));
+        ((JMenuItem)getElement("Exit")).addActionListener(e1 -> System.exit(0));
 
-        getApp().registerKeyAdapter("Amount", new KeyAdapter() {
+        ((JTextField)getElement("Amount")).addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
                 int keycode = e.getKeyChar();
                 if (!( ( keycode >= '0' && keycode <= '9' ) || ( keycode == 46 ) ) ) {
                     e.consume();
@@ -141,19 +137,33 @@ public class MainController extends Controller<MainUI>{
             }
         });
 
-        getApp().registerEvent("Daily Report", (ActionListener) dr->{
+        ((JMenuItem)getElement("Daily Report")).addActionListener(dr->{
             DayReport dayReport = new DayReport();
             DayReportController controller = new DayReportController( dayReport );
-            controller.registerEvents();
+            try {
+                controller.registerEvents();
+            } catch(Exception ex){
+                getApp().showError("Illegal State Exception", ex.toString());
+            }
             dayReport.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
         });
 
-        getApp().registerEvent("Products", (ActionListener) e -> {
+        ((JMenuItem)getElement("Get Last Entries")).addActionListener(e2 -> getLastEntry());
+        ((JMenuItem)getElement("Get Product")).addActionListener(e2 -> getAccountList());
+
+        ((JMenuItem)getElement("Products")).addActionListener(e -> {
             Products p = new Products();
             ProductController controller = new ProductController(p);
+            try{
+                controller.registerEvents();
+            } catch (IllegalStateException e1){
+                MainApp.showNotice("Illegal State Exception", e1.toString());
+            }
         });
 
     }
+
+
 }
 
 class DataUpdater extends SwingWorker<Integer, Integer>{

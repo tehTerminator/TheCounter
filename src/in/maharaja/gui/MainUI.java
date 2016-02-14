@@ -88,11 +88,13 @@ public class MainUI extends AbstractFrame {
         JMenuBar mainMenu = new JMenuBar();
         JMenu file = new JMenu("File");
         JMenu report = new JMenu("Report");
+        JMenu task = new JMenu("Tasks");
         JMenu help = new JMenu("Help");
         JMenu misc = new JMenu("Misc");
 
         mainMenu.add(file);
         mainMenu.add(report);
+        mainMenu.add(task);
         mainMenu.add(misc);
         mainMenu.add(help);
 
@@ -101,6 +103,8 @@ public class MainUI extends AbstractFrame {
         addMenuItem(report, "Daily Report", "res/calendar.png", KeyEvent.VK_D);
         addMenuItem(report, "Inventory Report", "res/box.png", KeyEvent.VK_I);
         addMenuItem(report, "Charts", "res/chart.png", KeyEvent.VK_C);
+        addMenuItem(task, "Get Product", "res/chart.png", KeyEvent.VK_G);
+        addMenuItem(task, "Get Last Entries", "res/chart.png", KeyEvent.VK_E);
         addMenuItem(misc, "Transfer", "res/transfer.png", KeyEvent.VK_T);
         addMenuItem(misc, "Products", "res/box.png", KeyEvent.VK_P);
         addMenuItem(help, "About", "res/about.png", KeyEvent.VK_A);
