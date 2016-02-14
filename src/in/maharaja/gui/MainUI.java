@@ -73,12 +73,6 @@ public class MainUI extends AbstractFrame {
         registerVariable("Amount", amountField);
         registerVariable("Product", typeField );
         registerVariable("Main Submit", submitButton);
-    }
-
-    @Override
-    public void showGUI() {
-        pack();
-        setVisible(true);
 
         this.getRootPane().setDefaultButton( submitButton );
     }
@@ -99,12 +93,13 @@ public class MainUI extends AbstractFrame {
         mainMenu.add(help);
 
         addMenuItem(file, "Sync", "res/sync.png", KeyEvent.VK_S);
+        addMenuItem(file, "Working Dir", "res/dir.png", KeyEvent.VK_W);
         addMenuItem(file, "Exit", "res/exit.png", KeyEvent.VK_X);
         addMenuItem(report, "Daily Report", "res/calendar.png", KeyEvent.VK_D);
         addMenuItem(report, "Inventory Report", "res/box.png", KeyEvent.VK_I);
         addMenuItem(report, "Charts", "res/chart.png", KeyEvent.VK_C);
-        addMenuItem(task, "Get Product", "res/chart.png", KeyEvent.VK_G);
-        addMenuItem(task, "Get Last Entries", "res/chart.png", KeyEvent.VK_E);
+        addMenuItem(task, "Get Product", "res/products.png", KeyEvent.VK_G);
+        addMenuItem(task, "Get Last Entries", "res/read.png", KeyEvent.VK_E);
         addMenuItem(misc, "Transfer", "res/transfer.png", KeyEvent.VK_T);
         addMenuItem(misc, "Products", "res/box.png", KeyEvent.VK_P);
         addMenuItem(help, "About", "res/about.png", KeyEvent.VK_A);

@@ -21,6 +21,7 @@ public class Products extends AbstractFrame {
 
         setResizable(false);
 
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     public void createGUI() {
@@ -52,11 +53,6 @@ public class Products extends AbstractFrame {
         add(scrollPane, "dock south");
 
         registerVariable("Product List", productList);
-    }
-
-    public void showGUI() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
     }
 
     public void addData(Vector<String> data) {

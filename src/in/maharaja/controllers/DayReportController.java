@@ -26,7 +26,8 @@ public class DayReportController extends Controller<DayReport> {
         app.showGUI();
 
         monthWise = new HashMap<>();
-        File working_dir = new File(MainApp.working_directory );
+        String working_directory = MainApp.appData.get("working_directory", "D:/COUNTER/");
+        File working_dir = new File(working_directory );
         File[] allFiles = working_dir.listFiles(TxtReader.getFileFilter());
 
         for(File f : allFiles){
@@ -66,9 +67,10 @@ public class DayReportController extends Controller<DayReport> {
     public void registerEvents() {
         getApp().registerTreeSelectionListener(e -> {
             String fileName = e.getPath().getLastPathComponent().toString();
+            String working_directory = MainApp.appData.get("working_directory", "D:/COUNTER/");
             if( fileName.matches(".*(_\\d{1,4}){3}[.]txt") ){
                 try {
-                    TxtReader reader = new TxtReader(MainApp.working_directory + "\\" + fileName);
+                    TxtReader reader = new TxtReader(working_directory + "\\" + fileName);
                     data = reader.getLines();
                     drawTable();
                 } catch(Exception ex1){

@@ -17,8 +17,6 @@ public abstract class AbstractFrame extends JFrame {
     AbstractFrame(String title){
         super(title);
         variableMap = new HashMap<>();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Center JFrame WRT Screen
     }
 
     /**
@@ -69,7 +67,11 @@ public abstract class AbstractFrame extends JFrame {
     }
 
     public abstract void createGUI();
-    public abstract void showGUI();
+    public final void showGUI(){
+        pack();
+        setLocationRelativeTo( null );
+        setVisible( true );
+    };
 
     public final void showNotice(String caption, String message){
         MainApp.showNotice(caption, message);

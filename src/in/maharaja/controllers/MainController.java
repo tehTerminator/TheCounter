@@ -31,8 +31,10 @@ public class MainController extends Controller<MainUI>{
 
         super( app );
 
+        getAccountList();
+
         Runnable getDataTask = ()->{
-            getAccountList();
+
             getLastEntry();
         };
 
@@ -90,7 +92,8 @@ public class MainController extends Controller<MainUI>{
     private void getLastEntry(){
         String fileName = "";
         try {
-            TxtReader txtReader = new TxtReader(MainApp.working_directory + "\\" + TxtWriter.getFileName() );
+            String working_directory = MainApp.appData.get("working_directory", "D:/COUNTER/");
+            TxtReader txtReader = new TxtReader(working_directory + "\\" + TxtWriter.getFileName() );
             fileName = txtReader.getFileName();
             String[] lines = txtReader.getLines();
 
@@ -161,8 +164,24 @@ public class MainController extends Controller<MainUI>{
             }
         });
 
-    }
+        ((JMenuItem) getElement("Working Dir")).addActionListener(e -> {
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setDialogTitle("Select Working Directory");
+            jFileChooser.setCurrentDirectory( new File(MainApp.appData.get("working_directory", "D:/COUNTER/")));
+            jFileChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 
+
+
+            if( jFileChooser.showDialog( getApp(), "Select Directory") == JFileChooser.APPROVE_OPTION){
+                String dir = jFileChooser.getSelectedFile().getAbsolutePath();
+                MainApp.appData.put("working_directory", dir);
+                MainApp.showNotice("Working Directory", dir);
+
+            }
+
+        });
+
+    }
 
 }
 

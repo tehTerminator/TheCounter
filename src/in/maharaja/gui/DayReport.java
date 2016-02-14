@@ -73,11 +73,6 @@ public class DayReport extends AbstractFrame {
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     }
 
-    @Override
-    public void showGUI() {
-        setVisible( true );
-    }
-
     public DefaultMutableTreeNode getRootNode(){ return root; }
 
     public void registerTreeSelectionListener(TreeSelectionListener t){

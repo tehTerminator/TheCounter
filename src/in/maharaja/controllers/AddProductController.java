@@ -27,9 +27,9 @@ public class AddProductController extends Controller<AddEditProduct> {
             if( e1.getStateChange() == ItemEvent.SELECTED ){
                 int item = ((JComboBox) getElement("Type")).getSelectedIndex();
                 if( item == 0 )
-                    ((JTextField) getElement("Quantity")).setEnabled( false );
-                else
                     ((JTextField) getElement("Quantity")).setEnabled( true );
+                else
+                    ((JTextField) getElement("Quantity")).setEnabled( false );
             }
         });
 

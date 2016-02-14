@@ -1,5 +1,6 @@
 package in.maharaja.utilities;
 
+import in.maharaja.gui.MainUI;
 import in.maharaja.main.MainApp;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -18,7 +19,8 @@ public class TxtWriter {
 
     public TxtWriter(String f) throws Exception {
 
-        File directory = new File(MainApp.working_directory);
+        String working_directory = MainApp.appData.get("working_directory", "D://COUNTER//");
+        File directory = new File( working_directory );
 
         if( !directory.exists() ){
             boolean result = false;
@@ -34,7 +36,7 @@ public class TxtWriter {
                 throw new FileNotFoundException("File Not found, unable to create Directory");
         }
 
-        String fileName = String.format("%s\\%s", MainApp.working_directory, f );
+        String fileName = String.format("%s\\%s", working_directory, f );
         out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(fileName, true)));
     }
 

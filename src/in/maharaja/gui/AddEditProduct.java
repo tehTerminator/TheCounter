@@ -18,8 +18,8 @@ public class AddEditProduct extends AbstractFrame {
      *
      * @param type 0 for Adding New data, 1 for Editing Old Data
      */
-    public AddEditProduct(int type){
-        super("Add New Product");
+    public AddEditProduct(int type, String title){
+        super( title );
         this.type = type;
         setSize(new Dimension(350, 300) );
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE );
@@ -37,6 +37,7 @@ public class AddEditProduct extends AbstractFrame {
             JTextField pid = new JTextField(10);
             add( pid );
             registerVariable("Product Id", pid);
+            pid.setEnabled( false );
         }
 
         add(new JLabel("Name"));
@@ -54,7 +55,6 @@ public class AddEditProduct extends AbstractFrame {
 
         add(new JLabel("Initial Quantity") );
         JTextField initialQty = new JTextField(30);
-        initialQty.setEnabled( false );
         add( initialQty );
 
         add(new JLabel("Description") );
@@ -73,13 +73,5 @@ public class AddEditProduct extends AbstractFrame {
         registerVariable("Submit", submit);
 
         getRootPane().setDefaultButton(submit);
-    }
-
-
-    /**
-     * Sets Visibility to true
-     */
-    public void showGUI(){
-        setVisible( true );
     }
 }

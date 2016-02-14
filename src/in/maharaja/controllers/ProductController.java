@@ -26,7 +26,7 @@ public class ProductController extends Controller<Products> {
     @Override
     public void registerEvents() {
         ((JButton)getElement("Add Button") ).addActionListener(e1 -> {
-            AddEditProduct addEditProduct = new AddEditProduct(AddEditProduct.ADD);
+            AddEditProduct addEditProduct = new AddEditProduct(AddEditProduct.ADD, "Add New Product");
             AddProductController controller = new AddProductController(addEditProduct);
             try{
                 controller.registerEvents();
@@ -36,6 +36,16 @@ public class ProductController extends Controller<Products> {
         });
 
         ((JButton)getElement("Refresh Button")).addActionListener( e -> reloadProducts() );
+        ((JButton)getElement("Edit Button")).addActionListener( e -> {
+            JList list = (JList) getElement("Product List");
+            if( list.isSelectionEmpty() ) JOptionPane.showMessageDialog(getApp(), "You Have Not Selected Any Product.");
+            else {
+                String productName = list.getSelectedValue().toString();
+                AddEditProduct editProduct = new AddEditProduct(AddEditProduct.EDIT, "Edit Product");
+                EditProductController controller = new EditProductController(editProduct, productName);
+                controller.registerEvents();
+            }
+        });
     }
 
     private void reloadProducts() {
