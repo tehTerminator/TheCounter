@@ -7,6 +7,7 @@ import in.maharaja.main.MainApp;
 import in.maharaja.sql.Connector;
 
 import javax.swing.*;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
@@ -44,6 +45,39 @@ public class ProductController extends Controller<Products> {
                 AddEditProduct editProduct = new AddEditProduct(AddEditProduct.EDIT, "Edit Product");
                 EditProductController controller = new EditProductController(editProduct, productName);
                 controller.registerEvents();
+            }
+        });
+
+        ((JButton) getElement("Delete Button")).addActionListener(e -> {
+            JList list = (JList) getElement("Product List");
+            if (!list.isSelectionEmpty()) {
+                String productName = list.getSelectedValue().toString();
+                try {
+                    PreparedStatement stmt = MainApp.getConnection().prepareStatement("SELECT ID FROM COUNTER.PRODUCTS WHERE TITLE = ?");
+                    stmt.setString(1, productName);
+
+                    ResultSet rs = stmt.executeQuery();
+
+                    int id = -1;
+
+                    while (rs.next()) {
+                        id = rs.getInt("ID");
+                    }
+
+                    stmt = MainApp.getConnection().prepareStatement("DELETE FROM COUNTER.PRODUCTS WHERE ID = ?");
+                    stmt.setInt(1, id);
+
+
+                    if (MainApp.executeUpdate(stmt) == MainApp.Result.SUCCESS)
+                        reloadProducts();
+                    else
+                        System.out.println("Unable to Delete " + productName);
+
+                } catch (Exception ex1) {
+                    getApp().showError(ex1.getClass().getSimpleName(), ex1.toString());
+                }
+            } else {
+                JOptionPane.showMessageDialog(getApp(), "You Have Not Selected Any Product.");
             }
         });
     }

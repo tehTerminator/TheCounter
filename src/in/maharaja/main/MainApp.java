@@ -11,6 +11,14 @@ import java.util.prefs.Preferences;
  * Main App Handles everything in Background
  */
 public class MainApp {
+
+    public enum Result {
+        SUCCESS,
+        FAILURE
+    }
+
+    ;
+
     public static int mode = 1;
     private static Image img = Toolkit.getDefaultToolkit().getImage("res/counter-icon.png");
     private static TrayIcon trayIcon = new TrayIcon(img, "Counter");
@@ -47,6 +55,8 @@ public class MainApp {
     }
 
     public static void showNotice(String caption, String message, TrayIcon.MessageType messageType) {
+        if (messageType == TrayIcon.MessageType.ERROR)
+            System.out.println(message);
         trayIcon.displayMessage(caption, message, messageType);
     }
 
@@ -55,15 +65,28 @@ public class MainApp {
         return DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
     }
 
-    public static void executeUpdate(String query){
+    public static Result executeUpdate(String query) {
         try {
             Connection con = getConnection();
             Statement stmt = con.createStatement();
             stmt.executeUpdate(query);
+
+            return Result.SUCCESS;
         } catch(SQLException ex){
             showNotice("SQLException Occurred", ex.toString(), TrayIcon.MessageType.ERROR);
+            return Result.FAILURE;
         } catch (ClassNotFoundException e) {
             showNotice("ClassNotFoundException", e.toString(), TrayIcon.MessageType.ERROR);
+            return Result.FAILURE;
+        }
+    }
+
+    public static Result executeUpdate(PreparedStatement stmt) {
+        try {
+            stmt.executeUpdate();
+            return Result.SUCCESS;
+        } catch (Exception ex) {
+            return Result.FAILURE;
         }
     }
 
@@ -78,6 +101,5 @@ public class MainApp {
         return null;
     }
 
-    public 
 }
 

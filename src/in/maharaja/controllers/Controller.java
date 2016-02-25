@@ -1,6 +1,6 @@
 package in.maharaja.controllers;
 
-        import in.maharaja.gui.AbstractFrame;
+import in.maharaja.gui.AbstractFrame;
 
 /**
  * Created by Prateek on 01-11-2015.
