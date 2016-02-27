@@ -54,11 +54,6 @@ public class MainUI extends AbstractFrame {
 
         createMenu();
 
-        try {
-            UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-        } catch(Exception ex){
-            System.out.println( ex.toString() );
-        }
     }
 
     public void createGUI() {
@@ -75,49 +70,13 @@ public class MainUI extends AbstractFrame {
         registerVariable("Main Submit", submitButton);
 
         this.getRootPane().setDefaultButton( submitButton );
-    }
 
-
-    private void createMenu(){
-        JMenuBar mainMenu = new JMenuBar();
-        JMenu file = new JMenu("File");
-        JMenu report = new JMenu("Report");
-        JMenu task = new JMenu("Tasks");
-        JMenu help = new JMenu("Help");
-        JMenu misc = new JMenu("Misc");
-
-        mainMenu.add(file);
-        mainMenu.add(report);
-        mainMenu.add(task);
-        mainMenu.add(misc);
-        mainMenu.add(help);
-
-        addMenuItem(file, "Sync", "res/sync.png", KeyEvent.VK_S);
-        addMenuItem(file, "Working Dir", "res/dir.png", KeyEvent.VK_W);
-        addMenuItem(file, "Exit", "res/exit.png", KeyEvent.VK_X);
-        addMenuItem(report, "Daily Report", "res/calendar.png", KeyEvent.VK_D);
-        addMenuItem(report, "Inventory Report", "res/box.png", KeyEvent.VK_I);
-        addMenuItem(report, "Charts", "res/chart.png", KeyEvent.VK_C);
-        addMenuItem(task, "Get Product", "res/products.png", KeyEvent.VK_G);
-        addMenuItem(task, "Get Last Entries", "res/read.png", KeyEvent.VK_E);
-        addMenuItem(misc, "Transfer", "res/transfer.png", KeyEvent.VK_T);
-        addMenuItem(misc, "Products", "res/box.png", KeyEvent.VK_P);
-        addMenuItem(help, "About", "res/about.png", KeyEvent.VK_A);
-
-        setJMenuBar(mainMenu);
-
-    }
-
-    private void addMenuItem(JMenu parent, String name, String iconPath, int keycode){
-        JMenuItem jMenuItem = new JMenuItem(name, new ImageIcon(iconPath));
-        parent.add(jMenuItem);
-        setShortcut(jMenuItem, keycode);
-        registerVariable(name, jMenuItem);
-    }
-
-    private void setShortcut(JMenuItem menuItem, int keycode){
-        menuItem.setMnemonic( keycode );
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(keycode, InputEvent.ALT_MASK));
+        createMenuItems("Main Menu > File, Report, Tasks, Misc, Help");
+        createMenuItems("File > Sync, Working Dir, Exit");
+        createMenuItems("Report > Daily Report, Inventory Report, Charts");
+        createMenuItems("Tasks > Get Products, Get Last Entries");
+        createMenuItems("Misc > Transfer, Products");
+        createMenuItems("Help > About");
     }
 
     public boolean isEmpty() {

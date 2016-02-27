@@ -117,8 +117,6 @@ public class MainController extends Controller<MainUI>{
      * All the events are registered through this method
      */
     public void registerEvents() {
-
-
         ((JButton)getElement("Main Submit")).addActionListener( e1 -> {
             try{
                 new DataUpdater(getApp()).execute();
@@ -152,7 +150,7 @@ public class MainController extends Controller<MainUI>{
         });
 
         ((JMenuItem)getElement("Get Last Entries")).addActionListener(e2 -> getLastEntry());
-        ((JMenuItem)getElement("Get Product")).addActionListener(e2 -> getAccountList());
+        ((JMenuItem) getElement("Get Products")).addActionListener(e2 -> getAccountList());
 
         ((JMenuItem)getElement("Products")).addActionListener(e -> {
             Products p = new Products();
